@@ -567,10 +567,17 @@ public class BundleEntryComposite extends Composite {
         GridData gridData = new GridData();
         gridData.verticalAlignment = GridData.FILL;
         gridData.grabExcessVerticalSpace = true;
-        gridData.horizontalAlignment = GridData.FILL;
-        gridData.grabExcessHorizontalSpace = true;
+        gridData.horizontalAlignment = GridData.BEGINNING;
+//        gridData.grabExcessHorizontalSpace = true;
 //        gridData.heightHint = UIUtils.getHeightInChars(textBox, 3);
         textBox.setLayoutData(gridData);
+
+        GridData gridData2 = new GridData();
+        gridData2.verticalAlignment = GridData.FILL;
+        gridData2.grabExcessVerticalSpace = true;
+        gridData2.horizontalAlignment = GridData.END;
+        textComment.getTextWidget().setLayoutData(gridData2);
+
         textBox.addFocusListener(new FocusListener() {
             public void focusGained(FocusEvent event) {
                 textBeforeUpdate = textBox.getText();
