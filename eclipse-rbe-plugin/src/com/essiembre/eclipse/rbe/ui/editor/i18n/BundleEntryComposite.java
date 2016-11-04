@@ -84,7 +84,7 @@ public class BundleEntryComposite extends Composite {
     private final Font smallFont;
 
 //    /*default*/ Text textBox;
-    private ITextViewer textViewer;
+    private ITextViewer textViewer, textComment;
     private IUndoManager undoManager;
     
     private Button commentedCheckbox;
@@ -534,13 +534,20 @@ public class BundleEntryComposite extends Composite {
      */
     private void createTextViewerRow() {
 //       int vscroll = RBEPreferences.getAutoAdjust() ? 0 : SWT.V_SCROLL;
-       textViewer = new TextViewer(this, SWT.MULTI | SWT.WRAP | SWT.H_SCROLL 
-               | SWT.V_SCROLL | SWT.BORDER);
+        textViewer = new TextViewer(this, SWT.MULTI | SWT.WRAP | SWT.H_SCROLL 
+                | SWT.V_SCROLL | SWT.BORDER);
+
+        textComment = new TextViewer(this, SWT.MULTI | SWT.WRAP | SWT.H_SCROLL 
+                | SWT.V_SCROLL | SWT.BORDER);
 
         textViewer.setDocument(new Document());
+        textComment.setDocument(new Document());
+
         undoManager = new TextViewerUndoManager(20);
         textViewer.setUndoManager(undoManager);
         textViewer.activatePlugins();
+        textComment.activatePlugins();
+
         final StyledText textBox = textViewer.getTextWidget();
         
         textBox.setEnabled(false);
