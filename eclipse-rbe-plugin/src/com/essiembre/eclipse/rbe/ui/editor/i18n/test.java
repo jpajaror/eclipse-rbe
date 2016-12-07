@@ -84,20 +84,9 @@ public class test extends Composite {
         textViewer = new TextViewer(composite, SWT.MULTI | SWT.WRAP | SWT.H_SCROLL 
                 | SWT.V_SCROLL | SWT.BORDER);
 
-        GridData gridData = new GridData();
-
-        // Similar button
-        gridData.horizontalAlignment = GridData.END;
-        gridData.grabExcessHorizontalSpace = true;
-        textComment = new TextViewer(composite, SWT.MULTI | SWT.WRAP | SWT.H_SCROLL 
-                | SWT.V_SCROLL | SWT.BORDER);
-
         textViewer.setDocument(new Document());
-        textComment.setDocument(new Document());
 
         textViewer.activatePlugins();
-        textComment.activatePlugins();
-
         final StyledText textBox = textViewer.getTextWidget();
         
         textBox.setEnabled(false);
@@ -114,18 +103,23 @@ public class test extends Composite {
            textBox.setFont(font);
         }
         
-        gridData = new GridData();
-        gridData.verticalAlignment = GridData.FILL;
-        gridData.grabExcessVerticalSpace = true;
-        gridData.horizontalAlignment = GridData.BEGINNING;
+        GridData gridData = new GridData();
+        gridData.verticalAlignment = SWT.CENTER;
+        gridData.horizontalAlignment = SWT.FILL;
+        gridData.grabExcessHorizontalSpace = true;
 //        gridData.grabExcessHorizontalSpace = true;
 //        gridData.heightHint = UIUtils.getHeightInChars(textBox, 3);
         textBox.setLayoutData(gridData);
 
+        textComment = new TextViewer(composite, SWT.MULTI | SWT.WRAP | SWT.H_SCROLL 
+                | SWT.V_SCROLL | SWT.BORDER);
+        textComment.setDocument(new Document());
+
+        textComment.activatePlugins();
+
         GridData gridData2 = new GridData();
-        gridData2.verticalAlignment = GridData.FILL;
-        gridData2.grabExcessVerticalSpace = true;
-        gridData2.horizontalAlignment = GridData.END;
+        gridData2.horizontalAlignment = SWT.FILL;
+        gridData2.grabExcessHorizontalSpace = true;
         textComment.getTextWidget().setLayoutData(gridData2);
 
     }
