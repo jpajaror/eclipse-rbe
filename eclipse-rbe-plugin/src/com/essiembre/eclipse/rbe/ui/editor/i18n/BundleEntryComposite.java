@@ -84,7 +84,7 @@ public class BundleEntryComposite extends Composite {
     private final Font smallFont;
 
 //    /*default*/ Text textBox;
-    private ITextViewer textViewer, textComment;
+    private ITextViewer textViewer, commentViewer;
     private IUndoManager undoManager;
     
     private Button commentedCheckbox;
@@ -533,21 +533,59 @@ public class BundleEntryComposite extends Composite {
      * Creates the text row.
      */
     private void createTextViewerRow() {
-//       int vscroll = RBEPreferences.getAutoAdjust() ? 0 : SWT.V_SCROLL;
-        textViewer = new TextViewer(this, SWT.MULTI | SWT.WRAP | SWT.H_SCROLL 
+        Composite textComposite = new Composite(this, SWT.NONE);
+        GridLayout gridLayout = new GridLayout();
+        gridLayout.numColumns = 2;
+        gridLayout.horizontalSpacing = 5;
+        gridLayout.verticalSpacing = 0;
+        gridLayout.marginWidth = 0;
+        gridLayout.marginHeight = 0;
+
+        textComposite.setLayout(gridLayout);
+        textComposite.setLayoutData(
+                new GridData(GridData.FILL_BOTH));
+
+        createTextViewer(textComposite);
+        createCommentViewer(textComposite);
+    }
+
+    private void createCommentViewer(Composite compositeRow) {
+        commentViewer = new TextViewer(compositeRow, SWT.MULTI | SWT.WRAP | SWT.H_SCROLL 
                 | SWT.V_SCROLL | SWT.BORDER);
 
-        textComment = new TextViewer(this, SWT.MULTI | SWT.WRAP | SWT.H_SCROLL 
-                | SWT.V_SCROLL | SWT.BORDER);
+        commentViewer.setDocument(new Document());
+        //TODO: UNDO manager
+        commentViewer.activatePlugins();
+        final StyledText textBox = commentViewer.getTextWidget();
+        
+        textBox.setEnabled(false);
+        //Support for right-to-left languages
+        FontRegistry fontRegistry = PlatformUI.getWorkbench().getThemeManager()
+                .getCurrentTheme().getFontRegistry();
+        Font font = fontRegistry.get(
+                "com.essiembre.eclipse.rbe.ui.preferences.fontDefinition");
+        if ( font != null ) {
+           textBox.setFont(font);
+        }
+        
+        GridData gridData = new GridData();
+        gridData.verticalAlignment = GridData.FILL;
+        gridData.grabExcessVerticalSpace = true;
+        gridData.horizontalAlignment = GridData.FILL;
+        gridData.grabExcessHorizontalSpace = true;
+//        gridData.heightHint = UIUtils.getHeightInChars(textBox, 3);
+        textBox.setLayoutData(gridData);
+    }
+
+    private void createTextViewer(Composite compositeRow) {
+//       int vscroll = RBEPreferences.getAutoAdjust() ? 0 : SWT.V_SCROLL;
+       textViewer = new TextViewer(compositeRow, SWT.MULTI | SWT.WRAP | SWT.H_SCROLL 
+               | SWT.V_SCROLL | SWT.BORDER);
 
         textViewer.setDocument(new Document());
-        textComment.setDocument(new Document());
-
         undoManager = new TextViewerUndoManager(20);
         textViewer.setUndoManager(undoManager);
         textViewer.activatePlugins();
-        textComment.activatePlugins();
-
         final StyledText textBox = textViewer.getTextWidget();
         
         textBox.setEnabled(false);
@@ -567,17 +605,10 @@ public class BundleEntryComposite extends Composite {
         GridData gridData = new GridData();
         gridData.verticalAlignment = GridData.FILL;
         gridData.grabExcessVerticalSpace = true;
-        gridData.horizontalAlignment = GridData.BEGINNING;
-//        gridData.grabExcessHorizontalSpace = true;
+        gridData.horizontalAlignment = GridData.FILL;
+        gridData.grabExcessHorizontalSpace = true;
 //        gridData.heightHint = UIUtils.getHeightInChars(textBox, 3);
         textBox.setLayoutData(gridData);
-
-        GridData gridData2 = new GridData();
-        gridData2.verticalAlignment = GridData.FILL;
-        gridData2.grabExcessVerticalSpace = true;
-        gridData2.horizontalAlignment = GridData.END;
-        textComment.getTextWidget().setLayoutData(gridData2);
-
         textBox.addFocusListener(new FocusListener() {
             public void focusGained(FocusEvent event) {
                 textBeforeUpdate = textBox.getText();
